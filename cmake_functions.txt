@@ -1,0 +1,24 @@
+include (FetchContent)
+
+function(import_fmtlib)
+    find_package(fmt QUIET)
+    if (${fmt_FOUND})
+        return()
+    endif()
+    message(STATUS "importing {fmt}")
+    FetchContent_Declare(
+            fmtlib
+            GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+            GIT_TAG 7.1.2
+    )
+    FetchContent_MakeAvailable(fmtlib)
+    FetchContent_GetProperties(fmtlib)
+    if(NOT fmtlib_POPULATED)
+        FetchContent_Populate(fmtlib)
+        set(FMT_DOC OFF CACHE BOOL "" FORCE)
+        set(FMT_INSTALL OFF CACHE BOOL "" FORCE)
+        set(FMT_TEST OFF CACHE BOOL "" FORCE)
+        set(FMT_FUZZ OFF CACHE BOOL "" FORCE)
+        add_subdirectory(${fmtlib_SOURCE_DIR})
+    endif()
+endfunction()
